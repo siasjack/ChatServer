@@ -134,6 +134,7 @@ class Logic(object):
                 #插入数据库
                 self.dbEngine.register_new_user(package.username, package.password)
                 retPackage.status = 1
+                print("user register is ok!")
 
             else:
                 #已经存在用户，返回从新注册

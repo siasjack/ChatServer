@@ -3,6 +3,16 @@ __author__ = 'watsy'
 
 import json
 from protocol import Protocol
+def is_json(myjson):
+	if isinstance(myjson,str):
+		try:
+			json.loads(myjson,encoding='utf-8')
+		except ValueError:
+			return False
+		return True
+	else:
+		return False
+
 
 
 class TCPStreamPackage(object):
@@ -14,36 +24,13 @@ class TCPStreamPackage(object):
         self._package_decode_callback = callback
 
     def add(self, data):
-        #组包
-        if len(self.datas) == 0:
-            self.datas = data
-        else:
-            self.datas = "%s%s" % (self.datas , data)
+		print("getdata:",data)
+		if is_json(data):
+			package = Protocol.checkPackage(data)
 
-        #拆包
-        length = -1
-        length_index = self.datas.find('length\" :')
-        if length_index != -1:
-            length_end = self.datas.find(',' , length_index + 9 , length_index + 9 + 10)
-            if length_end == -1:
-                length_end = self.datas.find('}', length_index + 9 , length_index + 9 + 10)
-
-            if length_end != -1:
-                length = self.datas[length_index + 9 :length_end]
-
-        if length != -1:
-            length = int(length.strip())
-
-        if length != -1 and length <= len(self.datas):
-           package = self.datas[0:length]
-           package = Protocol.checkPackage(package)
-
-           if self._package_decode_callback:
-               self._package_decode_callback(package)
-
-           if len(self.datas) == length:
-                self.datas = ''
-           else:
-                self.datas = self.datas[length]
+			if self._package_decode_callback:
+				self._package_decode_callback(package)
+		else:
+			print("not json data!!ignore")
 
 
