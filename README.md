@@ -1,6 +1,13 @@
 version 0.1 版本还存在一些BUG，采用sqlite数据库做为测试  
 关于推送部分大家可以在pypi搜索anps 下载安装apnsclient 测试  
 
+###前提
+安装依赖软件
+	1.安装pip：wget  https://bootstrap.pypa.io/get-pip.py  && python get-pip.py
+	2.pip install tornado
+	3.pip install tornado-redis
+	4.pip install sqlalchemy
+
 ###通用部分
 
 提交  
